@@ -383,35 +383,12 @@ namespace _55230620
 
         private void ToggleAIPredict()
         {
+            // 只使用本地算法进行预测，彻底下线DeepSeek交互
             isAIPredict = !isAIPredict;
             if (isAIPredict)
             {
-                // 计算AI预测的最佳位置
-                if (!string.IsNullOrEmpty(deepseekApiKey))
-                {
-                    // 使用DeepSeek API进行预测
-                    Task.Run(async () => 
-                    {
-                        try 
-                        {
-                            await CalculateAIPredictionWithDeepSeek();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"AI预测失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            isAIPredict = false;
-                        }
-                        
-                        // 在UI线程上刷新游戏面板
-                        this.Invoke(new Action(() => gamePanel.Invalidate()));
-                    });
-                }
-                else
-                {
-                    // 使用本地算法进行预测
-                    CalculateAIPrediction();
-                    gamePanel.Invalidate();
-                }
+                CalculateAIPrediction();
+                gamePanel.Invalidate();
             }
             else
             {
